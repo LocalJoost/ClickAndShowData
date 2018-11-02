@@ -26,15 +26,14 @@ public class DataDisplayer : MonoBehaviour, IInputClickHandler, IFocusable
             var toolTip = _createdToolTip.GetComponent<ToolTip>();
             toolTip.ShowOutline = false;
             toolTip.ShowBackground = true;
+            toolTip.ToolTipText = gameObject.name;
             toolTip.transform.position = transform.position + Vector3.up * 0.2f;
             toolTip.transform.parent = transform.parent;
             toolTip.AttachPointPosition = transform.position;
             toolTip.ContentParentTransform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
             var connector = toolTip.GetComponent<ToolTipConnector>();
             connector.Target = _createdToolTip;
-
-            toolTip.ToolTipText = gameObject.name;
-
+            _createdToolTip.SetActive(true);
         }
         else
         {
