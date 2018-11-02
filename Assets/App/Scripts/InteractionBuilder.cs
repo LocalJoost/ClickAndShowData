@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 
-public class InteractionBuilder : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+public class InteractionBuilder : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject _toolTip;
+    
+    void Start () {
 	    foreach (var child in GetComponentsInChildren<MeshFilter>())
 	    {
 	        child.gameObject.AddComponent<MeshCollider>();
-	        child.gameObject.AddComponent<DataDisplayer>();
+	        var displayer = child.gameObject.AddComponent<DataDisplayer>();
+	        displayer.ToolTip = _toolTip;
 	    }
 	}
 }

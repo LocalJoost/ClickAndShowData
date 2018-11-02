@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using HoloToolkit.Unity.InputModule;
+using HoloToolkit.UX.ToolTips;
 using UnityEngine;
 
 public class DataDisplayer : MonoBehaviour, IInputClickHandler, IFocusable
 {
-    private Vector3 _originalScale;
+    public GameObject ToolTip;
 
+    private GameObject _createdToolTip;
+    
     private Dictionary<MeshRenderer, Color[]> _originalColors = new Dictionary<MeshRenderer, Color[]>();
 
     void Start()
@@ -17,7 +20,29 @@ public class DataDisplayer : MonoBehaviour, IInputClickHandler, IFocusable
 
     public void OnInputClicked(InputClickedEventData eventData)
     {
-        Debug.Log("Click " + gameObject.name);
+        if (_createdToolTip == null)
+        {
+            _createdToolTip = Instantiate(ToolTip);
+            var toolTip = _createdToolTip.GetComponent<ToolTip>();
+            toolTip.ShowOutline = false;
+            toolTip.ShowBackground = true;
+            toolTip.transform.position = transform.position + Vector3.up * 0.2f;
+            toolTip.transform.parent = transform.parent;
+            toolTip.AttachPointPosition = transform.position;
+            toolTip.ContentParentTransform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+            var connector = toolTip.GetComponent<ToolTipConnector>();
+            connector.Target = _createdToolTip;
+
+            toolTip.ToolTipText = gameObject.name;
+
+        }
+        else
+        {
+            Destroy(_createdToolTip);
+            _createdToolTip = null;
+        }
+
+
     }
 
     public void OnFocusEnter()
@@ -50,7 +75,7 @@ public class DataDisplayer : MonoBehaviour, IInputClickHandler, IFocusable
     private void SetHighlight(bool status)
     {
         var targetColor = Color.red;
-        foreach (var component in GetComponentsInChildren<MeshRenderer>())
+        foreach (var component in _originalColors.Keys) 
         {
             for (var i = 0; i < component.materials.Length; i++)
             {
