@@ -33,7 +33,6 @@ public class DataDisplayer : MonoBehaviour, IInputClickHandler, IFocusable
             toolTip.ContentParentTransform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
             var connector = toolTip.GetComponent<ToolTipConnector>();
             connector.Target = _createdToolTip;
-            _createdToolTip.SetActive(true);
         }
         else
         {
